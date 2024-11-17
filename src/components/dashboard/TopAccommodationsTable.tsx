@@ -8,6 +8,7 @@ import jsPDF from 'jspdf';
 
 interface TopAccommodationsTableProps {
   data: BookingData[];
+  isYearComparison?: boolean;
   comparisonData?: BookingData[];
   startDate: Date;
   endDate: Date;
@@ -37,6 +38,7 @@ type AccommodationStats = {
 
 export function TopAccommodationsTable({
   data,
+  isYearComparison,
   comparisonData,
   startDate,
   endDate,

@@ -1,28 +1,24 @@
-import React, { useState, useCallback, useMemo } from 'react'
-import { CancellationsChart } from './charts/CancellationsChart'
+import React from 'react'
 import { CommissionsChart } from './charts/CommissionsChart'
 import { ArrivalsChart } from './charts/ArrivalsChart'
 import { CSVUploader } from './CSVUploader'
 import { ExportTools } from './ExportTools'
 import { DateRangePicker } from './DateRangePicker'
 import { TopAccommodationsTable } from './TopAccommodationsTable'
-import { TopCitiesTable } from './TopCitiesTable';
+import { TopCitiesTable } from './TopCitiesTable'
 import { startOfDay, endOfDay, isWithinInterval } from 'date-fns'
-import { CurrencyEuroIcon, BanknotesIcon, ClipboardDocumentListIcon, XCircleIcon } from '@heroicons/react/24/outline';
-import { KPICard } from './KPICard';
-import { formatCurrency, formatPercentage } from '../../utils/formatters';
-import { BookingData } from '../../types/booking';
-import { DataTable } from './DataTable'
 import { KPICards } from './KPICards'
-import { YearComparisonPicker } from './YearComparisonPicker';
-import { FilterToggle } from './FilterToggle';
+import { YearComparisonPicker } from './YearComparisonPicker'
+import { FilterToggle } from './FilterToggle'
+import { DataTable } from './DataTable'
+import { BookingData } from '../../types/booking'
 
 export function DashboardLayout() {
-  const [data, setData] = useState<BookingData[]>([]);
-  const [isYearComparison, setIsYearComparison] = useState<boolean>(false);
-  const [selectedYear1, setSelectedYear1] = useState<number>(new Date().getFullYear());
-  const [selectedYear2, setSelectedYear2] = useState<number>(new Date().getFullYear() - 1);
-  const [dateRange, setDateRange] = useState<{
+  const [data, setData] = React.useState<BookingData[]>([]);
+  const [isYearComparison, setIsYearComparison] = React.useState<boolean>(false);
+  const [selectedYear1, setSelectedYear1] = React.useState<number>(new Date().getFullYear());
+  const [selectedYear2, setSelectedYear2] = React.useState<number>(new Date().getFullYear() - 1);
+  const [dateRange, setDateRange] = React.useState<{
     start: Date | null;
     end: Date | null;
   }>({
@@ -30,9 +26,9 @@ export function DashboardLayout() {
     end: null,
   });
 
-  const [selectedRegion, setSelectedRegion] = useState<string>('');
+  const [selectedRegion, setSelectedRegion] = React.useState<string>('');
 
-  const uniqueRegions = useMemo(() => {
+  const uniqueRegions = React.useMemo(() => {
     const regions = new Set<string>();
     data.forEach(booking => {
       if (booking.region) {
@@ -43,7 +39,7 @@ export function DashboardLayout() {
   }, [data]);
 
   // Filtere die Daten basierend auf dem aktiven Filtermodus
-  const filteredData = useMemo(() => {
+  const filteredData = React.useMemo(() => {
     if (isYearComparison) {
       return data.filter(booking => {
         try {
@@ -83,7 +79,7 @@ export function DashboardLayout() {
     }
   }, [data, isYearComparison, selectedYear1, dateRange, selectedRegion]);
 
-  const comparisonData = useMemo(() => {
+  const comparisonData = React.useMemo(() => {
     if (!isYearComparison) return undefined;
     return data.filter(booking => {
       try {
@@ -98,7 +94,7 @@ export function DashboardLayout() {
     });
   }, [data, selectedYear2, isYearComparison, selectedRegion]);
 
-  const handleYearChange = useCallback((year1: number, year2: number) => {
+  const handleYearChange = React.useCallback((year1: number, year2: number) => {
     setSelectedYear1(year1);
     setSelectedYear2(year2);
   }, []);
