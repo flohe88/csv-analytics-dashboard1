@@ -22,6 +22,7 @@ export function CSVUploader({ onDataLoaded }: CSVUploaderProps) {
             'Buchungsdatum': 'bookingDate',
             'Anreise': 'arrivalDate',
             'Abreise': 'departureDate',
+            'SpID': 'spId',
             'ServiceCity': 'serviceCity',
             'Service Name (SolR)': 'serviceName',
             'Region': 'region',

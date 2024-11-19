@@ -4,6 +4,7 @@ export interface BookingData {
   bookingTime: string;
   arrivalDate: Date;
   departureDate: Date;
+  spId: string;  // Neue Eigenschaft für die SpID
   serviceCity: string;
   serviceName: string;
   serviceRegion: string;  // Neue Eigenschaft für Region
