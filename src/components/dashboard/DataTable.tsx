@@ -21,6 +21,12 @@ export function DataTable({ data }: DataTableProps) {
   const [sorting, setSorting] = useState<SortingState>([
     { id: 'bookingDate', desc: true } // Standardmäßig nach Buchungsdatum absteigend sortieren
   ])
+  const [cancellationStatus, setCancellationStatus] = useState<'all' | boolean>('all')
+
+  const filteredData = useMemo(() => {
+    if (cancellationStatus === 'all') return data;
+    return data.filter(booking => booking.cancelled === cancellationStatus);
+  }, [data, cancellationStatus]);
 
   const columns = useMemo<ColumnDef<BookingData>[]>(
     () => [
@@ -45,6 +51,12 @@ export function DataTable({ data }: DataTableProps) {
         header: 'Abreise',
         cell: (info) => format(new Date(info.getValue() as string), 'dd.MM.yyyy', { locale: de }),
         sortingFn: 'datetime',
+      },
+      {
+        // Spalte für die Objektnummer (SpID)
+        accessorKey: 'spId',
+        header: 'Objektnummer',
+        cell: (info) => info.getValue() || '-',
       },
       {
         accessorKey: 'serviceCity',
@@ -128,7 +140,7 @@ export function DataTable({ data }: DataTableProps) {
   )
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     state: {
       globalFilter,
@@ -143,14 +155,26 @@ export function DataTable({ data }: DataTableProps) {
 
   return (
     <div className="bg-white shadow rounded-lg overflow-hidden">
-      <div className="p-4">
+      <div className="p-4 flex gap-4 items-center">
         <input
           type="text"
           value={globalFilter}
           onChange={(e) => setGlobalFilter(e.target.value)}
           placeholder="Suchen..."
-          className="w-full p-2 border rounded"
+          className="flex-1 p-2 border rounded"
         />
+        <select
+          value={cancellationStatus === 'all' ? 'all' : cancellationStatus.toString()}
+          onChange={(e) => {
+            const value = e.target.value;
+            setCancellationStatus(value === 'all' ? 'all' : value === 'true')
+          }}
+          className="p-2 border rounded bg-white"
+        >
+          <option value="all">Alle Buchungen</option>
+          <option value="true">Stornierte Buchungen</option>
+          <option value="false">Nicht stornierte Buchungen</option>
+        </select>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full">
